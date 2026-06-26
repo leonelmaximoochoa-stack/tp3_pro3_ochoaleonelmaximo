@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ejercicio 3 - React</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/personas.css">
 </head>
 <body>
   <header class="header">
@@ -15,11 +16,17 @@
   </header>
 
   <main class="container">
-    <p>Contenido del ejercicio React — se implementará en la Etapa 3.</p>
+    <div id="root"></div>
   </main>
 
   <footer class="footer">
     <p>TP3 - Programación 3</p>
   </footer>
+
+  <!-- React desde CDN (compatible con GitHub Pages, sin build) -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <script type="text/babel" src="js/react-app.js"></script>
 </body>
 </html>
