@@ -61,11 +61,16 @@ body {
 
 .intro {
   margin-bottom: 1.5rem;
+  text-align: center;
 }
 
 .intro h2 {
   margin-bottom: 0.5rem;
   color: #2c3e50;
+}
+
+.intro p {
+  color: #666;
 }
 
 /* ===== Tarjetas de navegación (index) ===== */
@@ -92,6 +97,11 @@ body {
 .nav-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nav-card:focus-visible {
+  outline: 3px solid #f39c12;
+  outline-offset: 2px;
 }
 
 .nav-card h3 {
