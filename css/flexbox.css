@@ -1,0 +1,72 @@
+/* ===== Página Flexbox ===== */
+.flexbox-page {
+  max-width: 1100px;
+}
+
+.flexbox-intro {
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.flexbox-intro h2 {
+  color: #2c3e50;
+  margin-bottom: 0.5rem;
+}
+
+.flexbox-intro p {
+  color: #666;
+}
+
+/* ===== Contenedor Flexbox de tarjetas ===== */
+.cards-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: stretch;
+  gap: 1rem;
+  padding: 1rem 0;
+  min-height: 200px;
+}
+
+/* ===== Tarjeta individual ===== */
+.card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 1.25rem;
+  flex: 1 1 220px;
+  max-width: 260px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.card h3 {
+  color: #3498db;
+  margin-bottom: 0.5rem;
+  font-size: 1.15rem;
+}
+
+.card .categoria {
+  display: inline-block;
+  background: #ecf0f1;
+  color: #2c3e50;
+  font-size: 0.75rem;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  margin-bottom: 0.5rem;
+}
+
+.card .nivel {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.card.destacado {
+  border-color: #f39c12;
+  border-width: 2px;
+}

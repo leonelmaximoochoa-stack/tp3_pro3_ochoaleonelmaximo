@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ejercicio 1 - Flexbox</title>
   <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="css/flexbox.css">
 </head>
 <body>
   <header class="header">
@@ -14,8 +15,15 @@
     </nav>
   </header>
 
-  <main class="container">
-    <p>Contenido del ejercicio Flexbox — se implementará en la Etapa 1.</p>
+  <main class="container flexbox-page">
+    <section class="flexbox-intro">
+      <h2>Tecnologías web</h2>
+      <p>Tarjetas organizadas con Flexbox. El contenido se cargará dinámicamente con JavaScript.</p>
+    </section>
+
+    <div id="cards-container" class="cards-container">
+      <!-- Las tarjetas se generan desde js/flexbox.js -->
+    </div>
   </main>
 
   <footer class="footer">
