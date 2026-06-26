@@ -1,6 +1,17 @@
 const { useState } = React;
 
 /**
+ * Calcula el Índice de Masa Corporal (IMC).
+ * Fórmula: peso (kg) / altura (m)²
+ * La altura se ingresa en centímetros, por eso dividimos por 100.
+ */
+function calcularIMC(peso, alturaCm) {
+  const alturaMetros = alturaCm / 100;
+  const imc = peso / (alturaMetros * alturaMetros);
+  return imc.toFixed(2);
+}
+
+/**
  * Valida los datos de una persona antes de agregarla.
  */
 function validarPersona(datos) {
@@ -139,9 +150,9 @@ function FormularioPersona({ onAgregar }) {
 }
 
 /**
- * Tabla que muestra la lista de personas (sin IMC ni eliminar aún).
+ * Tabla que muestra personas, IMC calculado y botón eliminar por fila.
  */
-function TablaPersonas({ personas }) {
+function TablaPersonas({ personas, onEliminar }) {
   return (
     <section className="tabla-seccion">
       <h2>Lista de personas</h2>
@@ -154,12 +165,14 @@ function TablaPersonas({ personas }) {
               <th>Edad</th>
               <th>Altura (cm)</th>
               <th>Peso (kg)</th>
+              <th>IMC</th>
+              <th>Acciones</th>
             </tr>
           </thead>
           <tbody>
             {personas.length === 0 ? (
               <tr>
-                <td colSpan="5" className="tabla-vacia">
+                <td colSpan="7" className="tabla-vacia">
                   No hay personas cargadas. Agregá una desde el formulario.
                 </td>
               </tr>
@@ -172,6 +185,16 @@ function TablaPersonas({ personas }) {
                     <td>{persona.edad}</td>
                     <td>{persona.altura}</td>
                     <td>{persona.peso}</td>
+                    <td>{calcularIMC(persona.peso, persona.altura)}</td>
+                    <td>
+                      <button
+                        type="button"
+                        className="btn-eliminar"
+                        onClick={() => onEliminar(persona.id)}
+                      >
+                        Eliminar
+                      </button>
+                    </td>
                   </tr>
                 );
               })
@@ -195,6 +218,14 @@ function App() {
     });
   }
 
+  function eliminarPersona(id) {
+    setPersonas(function (listaActual) {
+      return listaActual.filter(function (persona) {
+        return persona.id !== id;
+      });
+    });
+  }
+
   return (
     <div className="personas-page">
       <section className="personas-intro">
@@ -203,7 +234,7 @@ function App() {
       </section>
 
       <FormularioPersona onAgregar={agregarPersona} />
-      <TablaPersonas personas={personas} />
+      <TablaPersonas personas={personas} onEliminar={eliminarPersona} />
     </div>
   );
 }
