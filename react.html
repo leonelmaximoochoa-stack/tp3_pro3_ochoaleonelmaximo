@@ -16,60 +16,243 @@
   </header>
 
   <main class="container">
-    <div id="root">
-      <p style="text-align:center;color:#666;">Cargando React...</p>
-    </div>
+    <div id="root"></div>
   </main>
 
   <footer class="footer">
     <p>TP3 - Programación 3</p>
   </footer>
 
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script>
-    // Carga js/react-app.js, lo compila con Babel y lo ejecuta.
-    // No usamos <script type="text/babel" src="..."> porque en file://
-    // y a veces en Pages falla la carga del archivo externo.
-    (function () {
-      var root = document.getElementById("root");
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7/babel.min.js"></script>
 
-      function mostrarError(mensaje) {
-        root.innerHTML = '<p class="mensaje-error" style="padding:1rem;">' + mensaje + "</p>";
+  <!-- JSX inline: Babel lo compila sin necesidad de cargar archivos externos -->
+  <script type="text/babel">
+    const { useState } = React;
+
+    function calcularIMC(peso, alturaCm) {
+      const alturaMetros = alturaCm / 100;
+      const imc = peso / (alturaMetros * alturaMetros);
+      return imc.toFixed(2);
+    }
+
+    function validarPersona(datos) {
+      if (!datos.nombre || !datos.apellido) {
+        return "Nombre y apellido son obligatorios.";
       }
+      if (isNaN(datos.edad) || datos.edad < 1 || datos.edad > 120) {
+        return "La edad debe ser un número entre 1 y 120.";
+      }
+      if (isNaN(datos.altura) || datos.altura < 50 || datos.altura > 250) {
+        return "La altura debe ser un número entre 50 y 250 cm.";
+      }
+      if (isNaN(datos.peso) || datos.peso < 20 || datos.peso > 300) {
+        return "El peso debe ser un número entre 20 y 300 kg.";
+      }
+      return "";
+    }
 
-      function iniciarApp(codigo) {
-        try {
-          var compilado = Babel.transform(codigo, { presets: ["react"] }).code;
-          var script = document.createElement("script");
-          script.text = compilado;
-          document.body.appendChild(script);
-        } catch (error) {
-          mostrarError("Error al compilar React: " + error.message);
+    function FormularioPersona({ onAgregar }) {
+      const [nombre, setNombre] = useState("");
+      const [apellido, setApellido] = useState("");
+      const [edad, setEdad] = useState("");
+      const [altura, setAltura] = useState("");
+      const [peso, setPeso] = useState("");
+      const [error, setError] = useState("");
+
+      function handleSubmit(event) {
+        event.preventDefault();
+
+        const nuevaPersona = {
+          id: Date.now(),
+          nombre: nombre.trim(),
+          apellido: apellido.trim(),
+          edad: parseInt(edad, 10),
+          altura: parseFloat(altura),
+          peso: parseFloat(peso)
+        };
+
+        const mensajeError = validarPersona(nuevaPersona);
+        if (mensajeError) {
+          setError(mensajeError);
+          return;
         }
+
+        setError("");
+        onAgregar(nuevaPersona);
+        setNombre("");
+        setApellido("");
+        setEdad("");
+        setAltura("");
+        setPeso("");
       }
 
-      if (typeof React === "undefined" || typeof Babel === "undefined") {
-        mostrarError("No se pudieron cargar React o Babel. Verificá tu conexión a internet.");
-        return;
-      }
+      return (
+        <div>
+          <form className="form-persona" onSubmit={handleSubmit} noValidate>
+            <div className="form-grupo">
+              <label htmlFor="nombre">Nombre</label>
+              <input
+                type="text"
+                id="nombre"
+                value={nombre}
+                onChange={(e) => setNombre(e.target.value)}
+                placeholder="Ej: Juan"
+                required
+              />
+            </div>
 
-      fetch("js/react-app.js")
-        .then(function (response) {
-          if (!response.ok) {
-            throw new Error("Archivo js/react-app.js no encontrado");
-          }
-          return response.text();
-        })
-        .then(iniciarApp)
-        .catch(function () {
-          mostrarError(
-            "No se pudo cargar js/react-app.js. Abrí el sitio desde GitHub Pages " +
-            "(no con doble clic) o usá Live Server en VS Code."
-          );
+            <div className="form-grupo">
+              <label htmlFor="apellido">Apellido</label>
+              <input
+                type="text"
+                id="apellido"
+                value={apellido}
+                onChange={(e) => setApellido(e.target.value)}
+                placeholder="Ej: Pérez"
+                required
+              />
+            </div>
+
+            <div className="form-grupo">
+              <label htmlFor="edad">Edad</label>
+              <input
+                type="number"
+                id="edad"
+                value={edad}
+                onChange={(e) => setEdad(e.target.value)}
+                min="1"
+                max="120"
+                placeholder="Ej: 25"
+                required
+              />
+            </div>
+
+            <div className="form-grupo">
+              <label htmlFor="altura">Altura (cm)</label>
+              <input
+                type="number"
+                id="altura"
+                value={altura}
+                onChange={(e) => setAltura(e.target.value)}
+                min="50"
+                max="250"
+                step="0.1"
+                placeholder="Ej: 175"
+                required
+              />
+            </div>
+
+            <div className="form-grupo">
+              <label htmlFor="peso">Peso (kg)</label>
+              <input
+                type="number"
+                id="peso"
+                value={peso}
+                onChange={(e) => setPeso(e.target.value)}
+                min="20"
+                max="300"
+                step="0.1"
+                placeholder="Ej: 70"
+                required
+              />
+            </div>
+
+            <button type="submit" className="btn-agregar">Agregar persona</button>
+          </form>
+
+          {error && <p className="mensaje-error">{error}</p>}
+        </div>
+      );
+    }
+
+    function TablaPersonas({ personas, onEliminar }) {
+      return (
+        <section className="tabla-seccion">
+          <h2>Lista de personas</h2>
+          <div className="tabla-contenedor">
+            <table className="tabla-personas">
+              <thead>
+                <tr>
+                  <th>Nombre</th>
+                  <th>Apellido</th>
+                  <th>Edad</th>
+                  <th>Altura (cm)</th>
+                  <th>Peso (kg)</th>
+                  <th>IMC</th>
+                  <th>Acciones</th>
+                </tr>
+              </thead>
+              <tbody>
+                {personas.length === 0 ? (
+                  <tr>
+                    <td colSpan="7" className="tabla-vacia">
+                      No hay personas cargadas. Agregá una desde el formulario.
+                    </td>
+                  </tr>
+                ) : (
+                  personas.map(function (persona) {
+                    return (
+                      <tr key={persona.id}>
+                        <td>{persona.nombre}</td>
+                        <td>{persona.apellido}</td>
+                        <td>{persona.edad}</td>
+                        <td>{persona.altura}</td>
+                        <td>{persona.peso}</td>
+                        <td>{calcularIMC(persona.peso, persona.altura)}</td>
+                        <td>
+                          <button
+                            type="button"
+                            className="btn-eliminar"
+                            onClick={() => onEliminar(persona.id)}
+                          >
+                            Eliminar
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
+              </tbody>
+            </table>
+          </div>
+        </section>
+      );
+    }
+
+    function App() {
+      const [personas, setPersonas] = useState([]);
+
+      function agregarPersona(nuevaPersona) {
+        setPersonas(function (listaActual) {
+          return listaActual.concat(nuevaPersona);
         });
-    })();
+      }
+
+      function eliminarPersona(id) {
+        setPersonas(function (listaActual) {
+          return listaActual.filter(function (persona) {
+            return persona.id !== id;
+          });
+        });
+      }
+
+      return (
+        <div className="personas-page">
+          <section className="personas-intro">
+            <h2>Cargar persona (React)</h2>
+            <p>Misma funcionalidad que el ejercicio 2, implementada con componentes y estado.</p>
+          </section>
+
+          <FormularioPersona onAgregar={agregarPersona} />
+          <TablaPersonas personas={personas} onEliminar={eliminarPersona} />
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<App />);
   </script>
 </body>
 </html>
