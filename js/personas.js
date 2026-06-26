@@ -6,6 +6,17 @@ const tablaBody = document.getElementById("tabla-body");
 const mensajeError = document.getElementById("mensaje-error");
 
 /**
+ * Calcula el Índice de Masa Corporal (IMC).
+ * Fórmula: peso (kg) / altura (m)²
+ * La altura se ingresa en centímetros, por eso dividimos por 100.
+ */
+function calcularIMC(peso, alturaCm) {
+  const alturaMetros = alturaCm / 100;
+  const imc = peso / (alturaMetros * alturaMetros);
+  return imc.toFixed(2);
+}
+
+/**
  * Valida que los campos del formulario tengan datos correctos.
  * Devuelve true si todo es válido, false si hay errores.
  */
@@ -49,6 +60,20 @@ function leerFormulario() {
 }
 
 /**
+ * Elimina una persona del arreglo por su id y actualiza la tabla.
+ */
+function eliminarPersona(id) {
+  const indice = personas.findIndex(function (persona) {
+    return persona.id === id;
+  });
+
+  if (indice !== -1) {
+    personas.splice(indice, 1);
+    renderizarTabla();
+  }
+}
+
+/**
  * Renderiza la tabla completa a partir del arreglo personas.
  */
 function renderizarTabla() {
@@ -57,7 +82,7 @@ function renderizarTabla() {
   if (personas.length === 0) {
     const filaVacia = document.createElement("tr");
     const celda = document.createElement("td");
-    celda.colSpan = 5;
+    celda.colSpan = 7;
     celda.className = "tabla-vacia";
     celda.textContent = "No hay personas cargadas. Agregá una desde el formulario.";
     filaVacia.appendChild(celda);
@@ -73,7 +98,8 @@ function renderizarTabla() {
       persona.apellido,
       persona.edad,
       persona.altura,
-      persona.peso
+      persona.peso,
+      calcularIMC(persona.peso, persona.altura)
     ];
 
     celdas.forEach(function (valor) {
@@ -81,6 +107,17 @@ function renderizarTabla() {
       td.textContent = valor;
       fila.appendChild(td);
     });
+
+    const tdAcciones = document.createElement("td");
+    const btnEliminar = document.createElement("button");
+    btnEliminar.type = "button";
+    btnEliminar.className = "btn-eliminar";
+    btnEliminar.textContent = "Eliminar";
+    btnEliminar.addEventListener("click", function () {
+      eliminarPersona(persona.id);
+    });
+    tdAcciones.appendChild(btnEliminar);
+    fila.appendChild(tdAcciones);
 
     tablaBody.appendChild(fila);
   });

@@ -122,3 +122,18 @@
   color: #999;
   font-style: italic;
 }
+
+.btn-eliminar {
+  background: #e74c3c;
+  color: #fff;
+  border: none;
+  border-radius: 4px;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-eliminar:hover {
+  background: #c0392b;
+}
