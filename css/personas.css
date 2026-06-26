@@ -1,0 +1,124 @@
+/* ===== Página Personas ===== */
+.personas-page {
+  max-width: 960px;
+}
+
+.personas-intro {
+  margin-bottom: 1.5rem;
+}
+
+.personas-intro h2 {
+  color: #2c3e50;
+  margin-bottom: 0.25rem;
+}
+
+.personas-intro p {
+  color: #666;
+}
+
+/* ===== Formulario ===== */
+.form-persona {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  margin-bottom: 0.5rem;
+}
+
+.form-grupo {
+  flex: 1 1 180px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.form-grupo label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: #2c3e50;
+}
+
+.form-grupo input {
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.form-grupo input:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+.btn-agregar {
+  flex: 1 1 100%;
+  background: #27ae60;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+
+.btn-agregar:hover {
+  background: #219a52;
+}
+
+.mensaje-error {
+  color: #e74c3c;
+  font-size: 0.9rem;
+  min-height: 1.4rem;
+  margin-bottom: 1rem;
+}
+
+/* ===== Tabla ===== */
+.tabla-seccion h2 {
+  color: #2c3e50;
+  margin-bottom: 1rem;
+}
+
+.tabla-contenedor {
+  overflow-x: auto;
+  background: #fff;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+}
+
+.tabla-personas {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-personas th,
+.tabla-personas td {
+  padding: 0.75rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid #eee;
+}
+
+.tabla-personas th {
+  background: #2c3e50;
+  color: #fff;
+  font-weight: 600;
+}
+
+.tabla-personas tbody tr:hover {
+  background: #f9f9f9;
+}
+
+.tabla-personas tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.tabla-vacia {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
