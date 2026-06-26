@@ -23,12 +23,13 @@
     <p>TP3 - Programación 3</p>
   </footer>
 
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/react@18/umd/react.production.min.js"></script>
-  <script crossorigin src="https://cdn.jsdelivr.net/npm/react-dom@18/umd/react-dom.production.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.26.10/babel.min.js"></script>
+  <!-- Versiones fijas: React 18 + Babel 7.26.10 -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-standalone/7.26.10/babel.min.js"></script>
 
-  <!-- JSX inline: Babel lo compila sin necesidad de cargar archivos externos -->
-  <script type="text/babel">
+  <!-- JSX guardado como texto; se compila manualmente abajo -->
+  <script type="text/plain" id="react-code">
     const { useState } = React;
 
     function calcularIMC(peso, alturaCm) {
@@ -253,6 +254,36 @@
 
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(<App />);
+  </script>
+
+  <script>
+    (function () {
+      var root = document.getElementById("root");
+
+      function mostrarError(mensaje) {
+        root.innerHTML = '<p class="mensaje-error" style="padding:1rem;">' + mensaje + "</p>";
+      }
+
+      if (typeof React === "undefined" || typeof ReactDOM === "undefined") {
+        mostrarError("No se pudo cargar React. Verificá tu conexión e intentá Ctrl+F5.");
+        return;
+      }
+
+      if (typeof Babel === "undefined") {
+        mostrarError("No se pudo cargar Babel 7.26.10. Verificá tu conexión e intentá Ctrl+F5.");
+        return;
+      }
+
+      try {
+        var codigo = document.getElementById("react-code").textContent;
+        var compilado = Babel.transform(codigo, { presets: ["react"] }).code;
+        var script = document.createElement("script");
+        script.text = compilado;
+        document.body.appendChild(script);
+      } catch (error) {
+        mostrarError("Error al compilar React: " + error.message);
+      }
+    })();
   </script>
 </body>
 </html>
