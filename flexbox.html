@@ -18,8 +18,14 @@
   <main class="container flexbox-page">
     <section class="flexbox-intro">
       <h2>Tecnologías web</h2>
-      <p>Tarjetas organizadas con Flexbox. El contenido se cargará dinámicamente con JavaScript.</p>
+      <p>Tarjetas organizadas con Flexbox. Usá los botones para ordenar, filtrar o resaltar.</p>
     </section>
+
+    <div class="flexbox-controls">
+      <button type="button" id="btn-ordenar" class="btn-control">Ordenar A → Z</button>
+      <button type="button" id="btn-filtrar" class="btn-control">Solo destacados</button>
+      <button type="button" id="btn-resaltar" class="btn-control">Resaltar Frontend</button>
+    </div>
 
     <div id="cards-container" class="cards-container">
       <!-- Las tarjetas se generan desde js/flexbox.js -->

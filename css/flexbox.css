@@ -17,6 +17,38 @@
   color: #666;
 }
 
+/* ===== Controles de interacción ===== */
+.flexbox-controls {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem;
+}
+
+.btn-control {
+  background: #3498db;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.6rem 1.2rem;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-control:hover {
+  background: #2980b9;
+}
+
+.btn-control.activo {
+  background: #27ae60;
+}
+
+.btn-control.activo:hover {
+  background: #219a52;
+}
+
 /* ===== Contenedor Flexbox de tarjetas ===== */
 .cards-container {
   display: flex;
@@ -69,4 +101,11 @@
 .card.destacado {
   border-color: #f39c12;
   border-width: 2px;
+}
+
+.card.resaltada {
+  background: #fff9e6;
+  border-color: #e74c3c;
+  border-width: 2px;
+  box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.25);
 }

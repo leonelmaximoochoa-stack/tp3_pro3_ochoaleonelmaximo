@@ -11,6 +11,14 @@ const tecnologias = [
 ];
 
 const contenedor = document.getElementById("cards-container");
+const btnOrdenar = document.getElementById("btn-ordenar");
+const btnFiltrar = document.getElementById("btn-filtrar");
+const btnResaltar = document.getElementById("btn-resaltar");
+
+// Estado de la vista
+let ordenAscendente = true;
+let soloDestacados = false;
+let resaltarFrontend = false;
 
 /**
  * Crea el elemento HTML de una tarjeta a partir de un objeto tecnología.
@@ -20,6 +28,9 @@ function crearTarjeta(tech) {
   article.className = "card";
   if (tech.destacado) {
     article.classList.add("destacado");
+  }
+  if (resaltarFrontend && tech.categoria === "Frontend") {
+    article.classList.add("resaltada");
   }
   article.dataset.id = tech.id;
 
@@ -42,6 +53,28 @@ function crearTarjeta(tech) {
 }
 
 /**
+ * Obtiene la lista a mostrar según filtros y orden actuales.
+ */
+function obtenerListaVisible() {
+  let lista = tecnologias.slice();
+
+  if (soloDestacados) {
+    lista = lista.filter(function (tech) {
+      return tech.destacado;
+    });
+  }
+
+  lista.sort(function (a, b) {
+    if (ordenAscendente) {
+      return a.nombre.localeCompare(b.nombre);
+    }
+    return b.nombre.localeCompare(a.nombre);
+  });
+
+  return lista;
+}
+
+/**
  * Renderiza todas las tarjetas del arreglo en el contenedor Flexbox.
  */
 function renderizarTarjetas(lista) {
@@ -53,7 +86,40 @@ function renderizarTarjetas(lista) {
   });
 }
 
+function actualizarVista() {
+  renderizarTarjetas(obtenerListaVisible());
+}
+
+// --- Eventos de interacción ---
+
+btnOrdenar.addEventListener("click", function () {
+  ordenAscendente = !ordenAscendente;
+  if (ordenAscendente) {
+    btnOrdenar.textContent = "Ordenar A → Z";
+  } else {
+    btnOrdenar.textContent = "Ordenar Z → A";
+  }
+  actualizarVista();
+});
+
+btnFiltrar.addEventListener("click", function () {
+  soloDestacados = !soloDestacados;
+  btnFiltrar.classList.toggle("activo", soloDestacados);
+  if (soloDestacados) {
+    btnFiltrar.textContent = "Mostrar todas";
+  } else {
+    btnFiltrar.textContent = "Solo destacados";
+  }
+  actualizarVista();
+});
+
+btnResaltar.addEventListener("click", function () {
+  resaltarFrontend = !resaltarFrontend;
+  btnResaltar.classList.toggle("activo", resaltarFrontend);
+  actualizarVista();
+});
+
 // Carga inicial al abrir la página
 document.addEventListener("DOMContentLoaded", function () {
-  renderizarTarjetas(tecnologias);
+  actualizarVista();
 });
