@@ -16,17 +16,60 @@
   </header>
 
   <main class="container">
-    <div id="root"></div>
+    <div id="root">
+      <p style="text-align:center;color:#666;">Cargando React...</p>
+    </div>
   </main>
 
   <footer class="footer">
     <p>TP3 - Programación 3</p>
   </footer>
 
-  <!-- React desde CDN (compatible con GitHub Pages, sin build) -->
-  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-  <script type="text/babel" src="js/react-app.js"></script>
+  <script>
+    // Carga js/react-app.js, lo compila con Babel y lo ejecuta.
+    // No usamos <script type="text/babel" src="..."> porque en file://
+    // y a veces en Pages falla la carga del archivo externo.
+    (function () {
+      var root = document.getElementById("root");
+
+      function mostrarError(mensaje) {
+        root.innerHTML = '<p class="mensaje-error" style="padding:1rem;">' + mensaje + "</p>";
+      }
+
+      function iniciarApp(codigo) {
+        try {
+          var compilado = Babel.transform(codigo, { presets: ["react"] }).code;
+          var script = document.createElement("script");
+          script.text = compilado;
+          document.body.appendChild(script);
+        } catch (error) {
+          mostrarError("Error al compilar React: " + error.message);
+        }
+      }
+
+      if (typeof React === "undefined" || typeof Babel === "undefined") {
+        mostrarError("No se pudieron cargar React o Babel. Verificá tu conexión a internet.");
+        return;
+      }
+
+      fetch("js/react-app.js")
+        .then(function (response) {
+          if (!response.ok) {
+            throw new Error("Archivo js/react-app.js no encontrado");
+          }
+          return response.text();
+        })
+        .then(iniciarApp)
+        .catch(function () {
+          mostrarError(
+            "No se pudo cargar js/react-app.js. Abrí el sitio desde GitHub Pages " +
+            "(no con doble clic) o usá Live Server en VS Code."
+          );
+        });
+    })();
+  </script>
 </body>
 </html>
