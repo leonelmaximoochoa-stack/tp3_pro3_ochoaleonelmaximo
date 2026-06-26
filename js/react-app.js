@@ -1,10 +1,200 @@
 const { useState } = React;
 
 /**
- * Componente principal de la aplicación.
- * Aquí se conectarán formulario y tabla en los siguientes commits.
+ * Valida los datos de una persona antes de agregarla.
+ */
+function validarPersona(datos) {
+  if (!datos.nombre || !datos.apellido) {
+    return "Nombre y apellido son obligatorios.";
+  }
+  if (isNaN(datos.edad) || datos.edad < 1 || datos.edad > 120) {
+    return "La edad debe ser un número entre 1 y 120.";
+  }
+  if (isNaN(datos.altura) || datos.altura < 50 || datos.altura > 250) {
+    return "La altura debe ser un número entre 50 y 250 cm.";
+  }
+  if (isNaN(datos.peso) || datos.peso < 20 || datos.peso > 300) {
+    return "El peso debe ser un número entre 20 y 300 kg.";
+  }
+  return "";
+}
+
+/**
+ * Formulario controlado para cargar una nueva persona.
+ * Recibe onAgregar por props (función del componente padre).
+ */
+function FormularioPersona({ onAgregar }) {
+  const [nombre, setNombre] = useState("");
+  const [apellido, setApellido] = useState("");
+  const [edad, setEdad] = useState("");
+  const [altura, setAltura] = useState("");
+  const [peso, setPeso] = useState("");
+  const [error, setError] = useState("");
+
+  function handleSubmit(event) {
+    event.preventDefault();
+
+    const nuevaPersona = {
+      id: Date.now(),
+      nombre: nombre.trim(),
+      apellido: apellido.trim(),
+      edad: parseInt(edad, 10),
+      altura: parseFloat(altura),
+      peso: parseFloat(peso)
+    };
+
+    const mensajeError = validarPersona(nuevaPersona);
+    if (mensajeError) {
+      setError(mensajeError);
+      return;
+    }
+
+    setError("");
+    onAgregar(nuevaPersona);
+
+    setNombre("");
+    setApellido("");
+    setEdad("");
+    setAltura("");
+    setPeso("");
+  }
+
+  return (
+    <>
+      <form className="form-persona" onSubmit={handleSubmit} noValidate>
+        <div className="form-grupo">
+          <label htmlFor="nombre">Nombre</label>
+          <input
+            type="text"
+            id="nombre"
+            value={nombre}
+            onChange={(e) => setNombre(e.target.value)}
+            placeholder="Ej: Juan"
+            required
+          />
+        </div>
+
+        <div className="form-grupo">
+          <label htmlFor="apellido">Apellido</label>
+          <input
+            type="text"
+            id="apellido"
+            value={apellido}
+            onChange={(e) => setApellido(e.target.value)}
+            placeholder="Ej: Pérez"
+            required
+          />
+        </div>
+
+        <div className="form-grupo">
+          <label htmlFor="edad">Edad</label>
+          <input
+            type="number"
+            id="edad"
+            value={edad}
+            onChange={(e) => setEdad(e.target.value)}
+            min="1"
+            max="120"
+            placeholder="Ej: 25"
+            required
+          />
+        </div>
+
+        <div className="form-grupo">
+          <label htmlFor="altura">Altura (cm)</label>
+          <input
+            type="number"
+            id="altura"
+            value={altura}
+            onChange={(e) => setAltura(e.target.value)}
+            min="50"
+            max="250"
+            step="0.1"
+            placeholder="Ej: 175"
+            required
+          />
+        </div>
+
+        <div className="form-grupo">
+          <label htmlFor="peso">Peso (kg)</label>
+          <input
+            type="number"
+            id="peso"
+            value={peso}
+            onChange={(e) => setPeso(e.target.value)}
+            min="20"
+            max="300"
+            step="0.1"
+            placeholder="Ej: 70"
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn-agregar">Agregar persona</button>
+      </form>
+
+      {error && <p className="mensaje-error">{error}</p>}
+    </>
+  );
+}
+
+/**
+ * Tabla que muestra la lista de personas (sin IMC ni eliminar aún).
+ */
+function TablaPersonas({ personas }) {
+  return (
+    <section className="tabla-seccion">
+      <h2>Lista de personas</h2>
+      <div className="tabla-contenedor">
+        <table className="tabla-personas">
+          <thead>
+            <tr>
+              <th>Nombre</th>
+              <th>Apellido</th>
+              <th>Edad</th>
+              <th>Altura (cm)</th>
+              <th>Peso (kg)</th>
+            </tr>
+          </thead>
+          <tbody>
+            {personas.length === 0 ? (
+              <tr>
+                <td colSpan="5" className="tabla-vacia">
+                  No hay personas cargadas. Agregá una desde el formulario.
+                </td>
+              </tr>
+            ) : (
+              personas.map(function (persona) {
+                return (
+                  <tr key={persona.id}>
+                    <td>{persona.nombre}</td>
+                    <td>{persona.apellido}</td>
+                    <td>{persona.edad}</td>
+                    <td>{persona.altura}</td>
+                    <td>{persona.peso}</td>
+                  </tr>
+                );
+              })
+            )}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Componente principal: guarda el estado de la lista y conecta hijos.
  */
 function App() {
+  const [personas, setPersonas] = useState([]);
+
+  function agregarPersona(nuevaPersona) {
+    setPersonas(function (listaActual) {
+      return listaActual.concat(nuevaPersona);
+    });
+  }
+
   return (
     <div className="personas-page">
       <section className="personas-intro">
@@ -12,20 +202,10 @@ function App() {
         <p>Misma funcionalidad que el ejercicio 2, implementada con componentes y estado.</p>
       </section>
 
-      <FormularioPersona />
-      <TablaPersonas />
+      <FormularioPersona onAgregar={agregarPersona} />
+      <TablaPersonas personas={personas} />
     </div>
   );
-}
-
-/** Placeholder: formulario de carga (se implementa en el commit 10) */
-function FormularioPersona() {
-  return <p>Formulario — próximamente</p>;
-}
-
-/** Placeholder: tabla de personas (se completa en el commit 11) */
-function TablaPersonas() {
-  return <p>Tabla — próximamente</p>;
 }
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
